@@ -1,0 +1,20 @@
+# This are all the settings you can configure in a theme file.
+# all values in here are the default values, but you can omit any of these and it will just use the defaults instead.
+# empty values for colors will use the defaults/terminal colors.
+# Command line flags override anything set here.
+
+# Drill settings
+mode: decode # decode (read the code, type the character) or encode (read the character, key the code)
+set: letters # letters, digits, alphanumeric or punctuation
+chars: "" # drill only these characters (like "eish5"), overriding set when not empty
+cheatsheet: false # show every code of the set under the prompt
+
+# Colors
+fg_color: "" # Used as the default fg color for all text
+bg_color: "" # Used as the bg color for the window
+selected_color: "#5a5a5a" # fg color for the selected menu item, the active tab and the input prompt
+border_color: "" # Missing a field is also fine, will use defaults/terminal colors
+accent_color: "" # fg color for the code or character being asked
+muted_color: "#6c6c6c" # fg color for hints, timers and help lines
+correct_color: "#5faf5f" # right answers and the filled part of accuracy bars
+wrong_color: "#d75f5f" # wrong answers and the empty part of accuracy bars
