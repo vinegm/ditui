@@ -7,7 +7,7 @@ import (
 
 	"gopkg.in/yaml.v3"
 
-	"dit/internal/morse"
+	"github.com/vinegm/ditui/internal/morse"
 )
 
 // validate reports an error for any setting

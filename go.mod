@@ -1,4 +1,4 @@
-module dit
+module github.com/vinegm/ditui
 
 go 1.25.5
 

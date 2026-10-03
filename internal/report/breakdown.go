@@ -5,7 +5,7 @@ import (
 	"slices"
 	"unicode"
 
-	"dit/internal/morse"
+	"github.com/vinegm/ditui/internal/morse"
 )
 
 // Bucket is one label of a breakdown, like "Q −−•−" or "4 elements".

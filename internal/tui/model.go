@@ -6,14 +6,14 @@ import (
 	tea "charm.land/bubbletea/v2"
 	lg "charm.land/lipgloss/v2"
 
-	"dit/internal/tui/drill"
-	"dit/internal/tui/menu"
-	"dit/internal/tui/results"
+	"github.com/vinegm/ditui/internal/tui/drill"
+	"github.com/vinegm/ditui/internal/tui/menu"
+	"github.com/vinegm/ditui/internal/tui/results"
 
-	"dit/internal/config"
-	"dit/internal/morse"
-	"dit/internal/report"
-	"dit/internal/tui/theme"
+	"github.com/vinegm/ditui/internal/config"
+	"github.com/vinegm/ditui/internal/morse"
+	"github.com/vinegm/ditui/internal/report"
+	"github.com/vinegm/ditui/internal/tui/theme"
 )
 
 // Smallest terminal the app renders correctly in.

@@ -12,10 +12,10 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"dit/internal/config"
-	"dit/internal/morse"
-	"dit/internal/tui"
-	"dit/internal/tui/drill"
+	"github.com/vinegm/ditui/internal/config"
+	"github.com/vinegm/ditui/internal/morse"
+	"github.com/vinegm/ditui/internal/tui"
+	"github.com/vinegm/ditui/internal/tui/drill"
 )
 
 const (

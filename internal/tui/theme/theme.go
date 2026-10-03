@@ -3,7 +3,7 @@ package theme
 import (
 	lg "charm.land/lipgloss/v2"
 
-	"dit/internal/config"
+	"github.com/vinegm/ditui/internal/config"
 )
 
 // WindowWidth is the outer width, border included, every window renders at,

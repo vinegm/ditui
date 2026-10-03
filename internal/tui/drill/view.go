@@ -7,8 +7,8 @@ import (
 
 	lg "charm.land/lipgloss/v2"
 
-	"dit/internal/morse"
-	"dit/internal/report"
+	"github.com/vinegm/ditui/internal/morse"
+	"github.com/vinegm/ditui/internal/report"
 )
 
 // How many of the latest answers the history strip shows.

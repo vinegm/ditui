@@ -7,8 +7,8 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 
-	"dit/internal/morse"
-	"dit/internal/tui/theme"
+	"github.com/vinegm/ditui/internal/morse"
+	"github.com/vinegm/ditui/internal/tui/theme"
 )
 
 // How often the question timer on screen refreshes.

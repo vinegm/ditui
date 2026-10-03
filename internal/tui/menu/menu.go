@@ -7,9 +7,9 @@ import (
 	tea "charm.land/bubbletea/v2"
 	lg "charm.land/lipgloss/v2"
 
-	"dit/internal/morse"
-	"dit/internal/tui/drill"
-	"dit/internal/tui/theme"
+	"github.com/vinegm/ditui/internal/morse"
+	"github.com/vinegm/ditui/internal/tui/drill"
+	"github.com/vinegm/ditui/internal/tui/theme"
 )
 
 type menuOption int

@@ -3,7 +3,7 @@ package report
 import (
 	"slices"
 
-	"dit/internal/morse"
+	"github.com/vinegm/ditui/internal/morse"
 )
 
 // CountCorrect is how many attempts were answered right.

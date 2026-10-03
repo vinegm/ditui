@@ -7,9 +7,9 @@ import (
 	tea "charm.land/bubbletea/v2"
 	lg "charm.land/lipgloss/v2"
 
-	"dit/internal/morse"
-	"dit/internal/report"
-	"dit/internal/tui/theme"
+	"github.com/vinegm/ditui/internal/morse"
+	"github.com/vinegm/ditui/internal/report"
+	"github.com/vinegm/ditui/internal/tui/theme"
 )
 
 // Lines the window spends around the breakdown table: title, summary,
