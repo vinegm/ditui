@@ -1,9 +1,12 @@
 package main
 
 import (
+	"cmp"
+	"errors"
 	"flag"
 	"fmt"
 	"io"
+	"io/fs"
 	"log"
 	"os"
 
@@ -26,17 +29,16 @@ type flags struct {
 	modeName    string
 	setName     string
 	chars       string
+	configPath  string
 	debugFile   string
 	cheatsheet  bool
 	debug       bool
 	showVersion bool
+	noConfig    bool
 }
 
 func main() {
-	// Loaded first so the flags default to it and only override what they set.
-	cfg, cfgErr := config.Load(config.DefaultPath())
-
-	opts := parseFlags(cfg)
+	opts := parseFlags()
 
 	if opts.showVersion {
 		fmt.Println("dit version", version)
@@ -52,9 +54,8 @@ func main() {
 		defer file.Close()
 	}
 
-	if cfgErr != nil && !os.IsNotExist(cfgErr) {
-		log.Printf("Could not load config: %v", cfgErr)
-	}
+	cfg := loadConfig(opts.noConfig, opts.configPath)
+	opts.applyConfig(cfg)
 
 	mode, err := morse.ParseMode(opts.modeName)
 	if err != nil {
@@ -78,24 +79,68 @@ func main() {
 	}
 }
 
-func parseFlags(cfg config.Config) flags {
+func parseFlags() flags {
 	var opts flags
 
-	flag.StringVar(&opts.modeName, "mode", cfg.Mode, "`MODE` to drill: decode (code to character) or encode (character to code)")
-	flag.StringVar(&opts.setName, "set", cfg.Set, "`SET` of characters to drill: letters, digits, alphanumeric or punctuation")
-	flag.StringVar(&opts.chars, "chars", cfg.Chars, "drill only these `CHARACTERS`, overriding --set")
-	flag.BoolVar(&opts.cheatsheet, "cheatsheet", cfg.Cheatsheet, "show every code of the set under the prompt")
+	defaults := config.Default()
+
+	flag.StringVar(&opts.modeName, "mode", defaults.Mode, "`MODE` to drill: decode (code to character) or encode (character to code)")
+	flag.StringVar(&opts.setName, "set", defaults.Set, "`SET` of characters to drill: letters, digits, alphanumeric or punctuation")
+	flag.StringVar(&opts.chars, "chars", defaults.Chars, "drill only these `CHARACTERS`, overriding --set")
+	flag.BoolVar(&opts.cheatsheet, "cheatsheet", defaults.Cheatsheet, "show every code of the set under the prompt")
 	flag.BoolVar(&opts.debug, "debug", false, "enable debug mode")
 	flag.StringVar(&opts.debugFile, "debug-file", logFile, "path to debug log file (ignored if --debug is not set)")
 	flag.BoolVar(&opts.showVersion, "version", false, "print the version and exit")
+	flag.BoolVar(&opts.noConfig, "no-config", false, "ignore config.yaml and run with the built-in defaults")
+	flag.StringVar(&opts.configPath, "config", "", "config file to load instead of the default path")
 	flag.Parse()
 
-	// A preset picked on the command line beats custom characters from the config.
-	if isSet("set") && !isSet("chars") {
-		opts.chars = ""
+	return opts
+}
+
+// applyConfig takes the drill settings not given on the command line from
+// cfg. The config is only known after parsing, so it can't be the flags' default.
+func (opts *flags) applyConfig(cfg config.Config) {
+	if !isSet("mode") {
+		opts.modeName = cfg.Mode
 	}
 
-	return opts
+	if !isSet("set") {
+		opts.setName = cfg.Set
+	}
+
+	// A preset picked on the command line beats custom characters from the config.
+	if !isSet("set") && !isSet("chars") {
+		opts.chars = cfg.Chars
+	}
+
+	if !isSet("cheatsheet") {
+		opts.cheatsheet = cfg.Cheatsheet
+	}
+}
+
+// loadConfig returns the defaults with -no-config, else the file at
+// path or the default path. Only an explicit path must exist.
+func loadConfig(noConfig bool, path string) config.Config {
+	if noConfig {
+		return config.Default()
+	}
+
+	cfg, err := config.Load(cmp.Or(path, config.DefaultPath()))
+	if err != nil && (!errors.Is(err, fs.ErrNotExist) || path != "") {
+		warn("could not load config: %v", err)
+	}
+
+	return cfg
+}
+
+// warn reports a problem found before the TUI starts, on
+// stderr so it is seen without -debug, and in the debug log.
+func warn(format string, args ...any) {
+	text := fmt.Sprintf(format, args...)
+
+	fmt.Fprintln(os.Stderr, "warning: "+text)
+	log.Print(text)
 }
 
 // isSet reports whether the named flag was given on the command line.
