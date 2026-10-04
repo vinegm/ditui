@@ -52,7 +52,7 @@ Command line flags (each overrides the config file):
 
 ## Configuration
 
-Configuration is read at startup from `$XDG_CONFIG_HOME/ditui/config.yaml`, defaulting to `~/.config/ditui/config.yaml`. The file is optional: anything it leaves out keeps its built-in default (see `internal/config/config.go`), and an unparsable or invalid file falls back to the defaults entirely. An example config with every setting is provided at `Themes/example-config.yaml`.
+Configuration is read at startup from `$XDG_CONFIG_HOME/ditui/config.yaml`, defaulting to `~/.config/ditui/config.yaml`. The file is optional: anything it leaves out keeps its built-in default (see `internal/config/config.go`), an unparsable file falls back to the defaults entirely, and an invalid mode, set or chars falls back to its own default. An example config with every setting is provided at `Themes/example-config.yaml`.
 
 Configurable items include the mode, the characters drilled, the cheatsheet, and the colors of the UI.
 

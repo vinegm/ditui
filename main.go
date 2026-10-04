@@ -55,25 +55,8 @@ func main() {
 	}
 
 	cfg := loadConfig(opts.noConfig, opts.configPath)
-	opts.applyConfig(cfg)
 
-	mode, err := morse.ParseMode(opts.modeName)
-	if err != nil {
-		usageError(err.Error())
-	}
-
-	set, err := morse.ResolveSet(opts.setName, opts.chars)
-	if err != nil {
-		usageError(err.Error())
-	}
-
-	options := drill.Options{
-		Mode:       mode,
-		Set:        set,
-		Cheatsheet: opts.cheatsheet,
-	}
-
-	program := tea.NewProgram(tui.New(cfg, options))
+	program := tea.NewProgram(tui.New(cfg, drillSettings(opts, cfg)))
 	if _, err := program.Run(); err != nil {
 		log.Fatal(err)
 	}
@@ -117,6 +100,49 @@ func (opts *flags) applyConfig(cfg config.Config) {
 	if !isSet("cheatsheet") {
 		opts.cheatsheet = cfg.Cheatsheet
 	}
+}
+
+// drillSettings is what a drill starts from: the
+// command line, then the config for what it left out.
+func drillSettings(opts flags, cfg config.Config) drill.Options {
+	opts.applyConfig(validDrillConfig(cfg))
+
+	mode, err := morse.ParseMode(opts.modeName)
+	if err != nil {
+		usageError(err.Error())
+	}
+
+	set, err := morse.ResolveSet(opts.setName, opts.chars)
+	if err != nil {
+		usageError(err.Error())
+	}
+
+	return drill.Options{
+		Mode:       mode,
+		Set:        set,
+		Cheatsheet: opts.cheatsheet,
+	}
+}
+
+// validDrillConfig resets each drill setting no drill can run
+// with to its default, keeping the rest of the file.
+func validDrillConfig(cfg config.Config) config.Config {
+	defaults := config.Default()
+
+	if _, err := morse.ParseMode(cfg.Mode); err != nil {
+		warn("invalid mode in the config, using the default: %v", err)
+
+		cfg.Mode = defaults.Mode
+	}
+
+	if _, err := morse.ResolveSet(cfg.Set, cfg.Chars); err != nil {
+		warn("invalid set or chars in the config, using the defaults: %v", err)
+
+		cfg.Set = defaults.Set
+		cfg.Chars = defaults.Chars
+	}
+
+	return cfg
 }
 
 // loadConfig returns the defaults with -no-config, else the file at
