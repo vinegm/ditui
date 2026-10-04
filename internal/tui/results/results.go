@@ -21,10 +21,10 @@ const barWidth = 12
 const help = "enter again · ←/→ breakdown · j/k scroll · q menu"
 
 type (
-	// Asks for control to drill again with the same options.
+	// AgainMsg asks for control to drill again with the same options.
 	AgainMsg struct{}
 
-	// Asks for control to return to the menu.
+	// ExitMsg asks for control to return to the menu.
 	ExitMsg struct{}
 )
 
@@ -54,6 +54,7 @@ func (window *Window) Show(attempts []morse.Attempt, breakdowns []report.Breakdo
 	window.scroll = 0
 }
 
+// Update handles the keys.
 func (window *Window) Update(msg tea.Msg) tea.Cmd {
 	switch msg := msg.(type) {
 	case tea.KeyPressMsg:
@@ -89,6 +90,7 @@ func (window *Window) handleKey(key string) tea.Cmd {
 	return nil
 }
 
+// View renders the results window as a string.
 func (window *Window) View(_, height int) string {
 	th := window.theme
 	breakdown := window.breakdowns[window.tab]

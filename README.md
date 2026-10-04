@@ -1,14 +1,14 @@
 <div align="center">
 <pre>
-.    ▐▌ ▄   ▐▌      .
-. ▗▞▀▜▌ ▄ ▗▄▟▙▄▖    .
-. ▝▚▄▟▌ █   ▐▙▄▖    .
-.  − • •  • •  −    .
+.     ▐▌ ▄   ▐▌         ▄      .
+.  ▗▞▀▜▌ ▄ ▗▄▟▙▄▖ ▄   ▄ ▄      .
+.  ▝▚▄▟▌ █   ▐▙▄▖ █▄▄▄█ █      .
+. − • •  • •  −  • • −  • •    .
 <strong>Morse code trainer TUI in Go</strong>
 </pre>
 </div>
 
-dit is a TUI trainer for [Morse code](https://en.wikipedia.org/wiki/Morse_code), built with Go and the Bubble Tea TUI framework. It shows you a code to read or a character to key, times each answer, and when you stop it breaks down where you are weakest by character, code length and kind of character.
+ditui is a TUI trainer for [Morse code](https://en.wikipedia.org/wiki/Morse_code), built with Go and the Bubble Tea TUI framework. It shows you a code to read or a character to key, times each answer, and when you stop it breaks down where you are weakest by character, code length and kind of character.
 
 ## Features
 
@@ -34,8 +34,8 @@ go run main.go
 Or build a standalone binary:
 
 ```bash
-go build -o dit ./
-./dit
+go build -o ditui ./
+./ditui
 ```
 
 Command line flags (each overrides the config file):
@@ -46,7 +46,7 @@ Command line flags (each overrides the config file):
 - `--cheatsheet` : show every code of the set under the prompt
 - `--version` : print the version and exit
 - `--debug` : enable debug logging
-- `--debug-file <path>` : write debug logs to the specified file (defaults to `/tmp/dit.log`)
+- `--debug-file <path>` : write debug logs to the specified file (defaults to `/tmp/ditui.log`)
 - `--config <path>` : load the config from `<path>` instead of the default location
 - `--no-config` : ignore the config file and run with the built-in defaults
 
@@ -88,7 +88,7 @@ Results:
 
 ## Themes
 
-Theme files are stored in the `Themes` directory; a few presets are included (catppuccin-mocha, gruvbox, tokyo-night). Copy one to `~/.config/dit/config.yaml`, or merge its colors into your config.
+Theme files are stored in the `Themes` directory; a few presets are included (catppuccin-mocha, gruvbox, tokyo-night). Copy one to `~/.config/ditui/config.yaml`, or merge its colors into your config.
 
 ## Development
 

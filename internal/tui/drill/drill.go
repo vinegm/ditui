@@ -22,7 +22,7 @@ type Options struct {
 }
 
 type (
-	// Asks for control to end the session, handing over what was answered.
+	// FinishedMsg asks for control to end the session, handing over what was answered.
 	FinishedMsg struct{ Attempts []morse.Attempt }
 
 	// Message carrying a timer tick, tagged with the session that armed it.
@@ -80,6 +80,7 @@ func (window *Window) Start(options Options) tea.Cmd {
 	return tick(window.tickTag)
 }
 
+// Update handles the keys and keeps the timer ticking.
 func (window *Window) Update(msg tea.Msg) tea.Cmd {
 	switch msg := msg.(type) {
 	case tea.KeyPressMsg:

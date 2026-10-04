@@ -17,7 +17,7 @@ const (
 	prettyDah = "−"
 )
 
-// Longest code in the table, the one for "$".
+// MaxElements is the longest code in the table, the one for "$".
 const MaxElements = 7
 
 // International Morse code, plus the common prosign-free punctuation.

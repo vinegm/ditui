@@ -1,5 +1,7 @@
 package config
 
+// Config is config.yaml.
+// Keys are documented in Themes/example-config.yaml.
 type Config struct {
 	// Drill settings
 	Mode       string `yaml:"mode"`       // "decode" (code to character) or "encode" (character to code)
@@ -18,8 +20,8 @@ type Config struct {
 	WrongColor    string `yaml:"wrong_color"`
 }
 
-// The built-in configuration, used as the
-// base the config file is layered over.
+// Default is the built-in configuration, used
+// as the base the config file is layered over.
 func Default() Config {
 	return Config{
 		Mode:       "decode",

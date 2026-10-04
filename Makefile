@@ -1,4 +1,4 @@
-BINARY := dit
+BINARY := ditui
 
 .PHONY: build
 build:

@@ -19,7 +19,7 @@ import (
 )
 
 const (
-	logFile  = "/tmp/dit.log"
+	logFile  = "/tmp/ditui.log"
 	logLevel = "debug"
 )
 
@@ -41,7 +41,7 @@ func main() {
 	opts := parseFlags()
 
 	if opts.showVersion {
-		fmt.Println("dit version", version)
+		fmt.Println("ditui version", version)
 		return
 	}
 

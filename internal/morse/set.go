@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-// Name of a set given as a list of characters rather than picked by name.
+// CustomName names a set given as a list of characters rather than picked by name.
 const CustomName = "custom"
 
 // Set is the pool of characters a drill asks from.

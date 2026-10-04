@@ -14,7 +14,7 @@ import (
 // How many of the latest answers the history strip shows.
 const historyLength = 25
 
-// Most lines the cheatsheet takes, so a large custom set can't outgrow the terminal.
+// MaxCheatsheetLines is the most lines the cheatsheet takes, so a large custom set can't outgrow the terminal.
 const MaxCheatsheetLines = 6
 
 const (
@@ -28,7 +28,7 @@ func (window *Window) View(_, _ int) string {
 	th := window.theme
 
 	lines := []string{
-		th.TitleStyle.Render("dit") + th.MutedStyle.Render("  "+window.options.Mode.String()+" · "+window.options.Set.Label()),
+		th.TitleStyle.Render("ditui") + th.MutedStyle.Render("  "+window.options.Mode.String()+" · "+window.options.Set.Label()),
 		th.TextStyle.Render(window.score()),
 		window.history(),
 		"",
