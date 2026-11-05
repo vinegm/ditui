@@ -9,6 +9,8 @@ import (
 	"io/fs"
 	"log"
 	"os"
+	"runtime/debug"
+	"strings"
 
 	tea "charm.land/bubbletea/v2"
 
@@ -41,7 +43,7 @@ func main() {
 	opts := parseFlags()
 
 	if opts.showVersion {
-		fmt.Println("ditui version", version)
+		fmt.Println("ditui version", currentVersion())
 		return
 	}
 
@@ -60,6 +62,21 @@ func main() {
 	if _, err := program.Run(); err != nil {
 		log.Fatal(err)
 	}
+}
+
+// currentVersion is the version a release stamped, or else
+// what Go recorded, as go install doesn't stamp one.
+func currentVersion() string {
+	if version != "dev" {
+		return version
+	}
+
+	info, ok := debug.ReadBuildInfo()
+	if !ok || info.Main.Version == "" || info.Main.Version == "(devel)" {
+		return version
+	}
+
+	return strings.TrimPrefix(info.Main.Version, "v")
 }
 
 func parseFlags() flags {
