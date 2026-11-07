@@ -1,6 +1,8 @@
 package theme
 
 import (
+	"strings"
+
 	lg "charm.land/lipgloss/v2"
 
 	"github.com/vinegm/ditui/internal/config"
@@ -24,6 +26,14 @@ type Theme struct {
 	WrongStyle            lg.Style
 
 	WindowStyle lg.Style
+
+	keyHintsStyle lg.Style
+}
+
+// Hint is a key the user can press, and what it does.
+type Hint struct {
+	Key  string
+	Desc string
 }
 
 // NewTheme resolves a Theme from the config.
@@ -72,6 +82,8 @@ func (theme *Theme) setStyles() {
 	theme.CorrectStyle = withFg(lg.NewStyle().Inherit(genericStyle), colors.Correct)
 	theme.WrongStyle = withFg(lg.NewStyle().Inherit(genericStyle), colors.Wrong)
 
+	theme.keyHintsStyle = withFg(lg.NewStyle(), colors.KeyHints)
+
 	theme.WindowStyle = withBg(lg.NewStyle(), colors.Bg).
 		Width(WindowWidth).
 		Padding(0, 1).
@@ -79,4 +91,14 @@ func (theme *Theme) setStyles() {
 		BorderBackground(lg.Color(colors.Bg)).
 		BorderForeground(lg.Color(colors.Border)).
 		Align(lg.Center)
+}
+
+// RenderHints draws the key hints bar, cut to fit in width.
+func (theme *Theme) RenderHints(hints []Hint, width int) string {
+	parts := make([]string, len(hints))
+	for i, hint := range hints {
+		parts[i] = hint.Desc + ": " + hint.Key
+	}
+
+	return theme.keyHintsStyle.MaxWidth(width).Render(strings.Join(parts, " | "))
 }

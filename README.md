@@ -19,6 +19,7 @@ ditui is a TUI trainer for [Morse code](https://en.wikipedia.org/wiki/Morse_code
 - Wrong answers show what you actually said, so mix-ups like `R • − •` for `L • − • •` stand out
 - An optional cheatsheet with every code of the set under the prompt
 - End-of-session results ranking characters, code lengths and kinds worst-first (lowest accuracy, then slowest), with accuracy bars
+- A key hints bar at the bottom of the screen
 - Configurable colors (see the Themes directory)
 
 ## Getting Started

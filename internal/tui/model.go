@@ -16,13 +16,14 @@ import (
 	"github.com/vinegm/ditui/internal/tui/theme"
 )
 
-// Smallest terminal the app renders correctly in.
-//
-//	WARN: Must be able to fit any window.
+// Smallest terminal every window and the key hints bar fit in.
 const (
 	minWidth  = theme.WindowWidth + 2
-	minHeight = 16 + drill.MaxCheatsheetLines // the drill with its cheatsheet is the tallest window
+	minHeight = 14 + drill.MaxCheatsheetLines + hintsHeight // the drill with its cheatsheet is the tallest window
 )
+
+// Rows the key hints bar takes at the bottom of the screen.
+const hintsHeight = 1
 
 // Window is a screen of the app. SetSize is called after
 // every Update, before View draws at that size.
@@ -30,6 +31,7 @@ type Window interface {
 	Update(msg tea.Msg) tea.Cmd
 	SetSize(width, height int)
 	View() string
+	Hints() []theme.Hint
 }
 
 // Model represents the state of the application.
@@ -43,6 +45,8 @@ type Model struct {
 	results       *results.Window
 
 	options drill.Options // of the drill last started, reused by "again"
+
+	theme *theme.Theme
 }
 
 // New creates a new model with initial state.
@@ -56,6 +60,7 @@ func New(cfg config.Config, options drill.Options) Model {
 		drill:         drill.New(th),
 		results:       results.New(th),
 		options:       options,
+		theme:         th,
 	}
 }
 
@@ -67,7 +72,7 @@ func (model Model) Init() tea.Cmd {
 // Update handles a message, then sizes the current window for View.
 func (model Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	model, cmd := model.update(msg)
-	model.currentWindow.SetSize(model.width, model.height)
+	model.currentWindow.SetSize(model.width, model.height-hintsHeight)
 
 	return model, cmd
 }
@@ -122,20 +127,10 @@ func (model *Model) finish(attempts []morse.Attempt) bool {
 	return true
 }
 
-// View handles terminal size checks
-// and delegates to the current window.
+// View draws the current window centred on the screen, with the
+// key hints bar under it, or a notice if the terminal is too small.
 func (model Model) View() tea.View {
-	content := model.viewContent()
-
-	view := tea.NewView(
-		lg.Place(
-			model.width,
-			model.height,
-			lg.Center,
-			lg.Center,
-			content,
-		),
-	)
+	view := tea.NewView(model.viewContent())
 	view.AltScreen = true
 
 	return view
@@ -143,8 +138,24 @@ func (model Model) View() tea.View {
 
 func (model Model) viewContent() string {
 	if model.width < minWidth || model.height < minHeight {
-		return fmt.Sprintf("Terminal too small — need at least %dx%d", minWidth, minHeight)
+		return lg.Place(
+			model.width,
+			model.height,
+			lg.Center,
+			lg.Center,
+			fmt.Sprintf("Terminal too small — need at least %dx%d", minWidth, minHeight),
+		)
 	}
 
-	return model.currentWindow.View()
+	window := lg.Place(
+		model.width,
+		model.height-hintsHeight,
+		lg.Center,
+		lg.Center,
+		model.currentWindow.View(),
+	)
+
+	hints := model.theme.RenderHints(model.currentWindow.Hints(), model.width)
+
+	return lg.JoinVertical(lg.Left, window, hints)
 }

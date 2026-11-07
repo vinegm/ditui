@@ -16,6 +16,7 @@ theme:
   selected: "#5a5a5a" # fg for the selected menu item, the active tab and the input prompt
   border: ""
   accent: "" # fg for the code or character being asked
-  muted: "#6c6c6c" # fg for hints, timers and help lines
+  muted: "#6c6c6c" # fg for timers and secondary text
   correct: "#5faf5f" # right answers and the filled part of accuracy bars
   wrong: "#d75f5f" # wrong answers and the empty part of accuracy bars
+  key_hints: "#6c6c6c" # fg for the key hints bar at the bottom

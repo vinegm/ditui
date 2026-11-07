@@ -22,8 +22,6 @@ const (
 	quit
 )
 
-const help = "↑/↓ move · ←/→ change · enter select · q quit"
-
 // A single selectable row of the menu.
 type menuItem struct {
 	label  string
@@ -93,10 +91,25 @@ func (window *Window) View() string {
 		sb.WriteString(window.theme.TextStyle.Render(item.label))
 	}
 
-	sb.WriteString("\n\n")
-	sb.WriteString(window.theme.MutedStyle.Render(help))
-
 	return window.theme.WindowStyle.Render(sb.String())
+}
+
+// Hints is the keys for the key hints bar, for the selected row.
+func (window *Window) Hints() []theme.Hint {
+	hints := []theme.Hint{{Key: "jk", Desc: "Move"}}
+
+	switch window.current() {
+	case mode, characters:
+		hints = append(hints, theme.Hint{Key: "hl", Desc: "Change"})
+
+	case cheatsheet:
+		hints = append(hints, theme.Hint{Key: "enter", Desc: "Toggle"})
+
+	case startDrill, quit:
+		hints = append(hints, theme.Hint{Key: "enter", Desc: "Select"})
+	}
+
+	return append(hints, theme.Hint{Key: "q", Desc: "Quit"})
 }
 
 func getMenuTitle() string {

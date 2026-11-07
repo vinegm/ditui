@@ -6,3 +6,4 @@ theme:
   muted: "#6c7086"
   correct: "#a6e3a1"
   wrong: "#f38ba8"
+  key_hints: "#6c7086"

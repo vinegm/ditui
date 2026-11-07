@@ -13,12 +13,10 @@ import (
 )
 
 // Lines the window spends around the breakdown table: title, summary,
-// tabs, worst, scroll marker, help, the blanks between them and the border.
-const chromeHeight = 12
+// tabs, worst, scroll marker, the blanks between them and the border.
+const chromeHeight = 9
 
 const barWidth = 12
-
-const help = "enter again · ←/→ breakdown · j/k scroll · q menu"
 
 type (
 	// AgainMsg asks for control to drill again with the same options.
@@ -135,11 +133,24 @@ func (window *Window) View() string {
 		"",
 		lg.JoinVertical(lg.Left, rows...),
 		th.MutedStyle.Render(window.scrollMarker(len(ranked), visible)),
-		"",
-		th.MutedStyle.Render(help),
 	}
 
 	return th.WindowStyle.Render(strings.Join(lines, "\n"))
+}
+
+// Hints is the keys for the key hints bar.
+func (window *Window) Hints() []theme.Hint {
+	hints := []theme.Hint{{Key: "hl", Desc: "Breakdown"}}
+
+	if len(window.breakdowns[window.tab].Buckets) > window.visibleRows() {
+		hints = append(hints, theme.Hint{Key: "jk", Desc: "Scroll"})
+	}
+
+	return append(
+		hints,
+		theme.Hint{Key: "enter", Desc: "Again"},
+		theme.Hint{Key: "q", Desc: "Menu"},
+	)
 }
 
 func (window *Window) summary() string {

@@ -34,6 +34,7 @@ func Default() Config {
 			Muted:    "#6c6c6c",
 			Correct:  "#5faf5f",
 			Wrong:    "#d75f5f",
+			KeyHints: "#6c6c6c",
 		},
 	}
 }

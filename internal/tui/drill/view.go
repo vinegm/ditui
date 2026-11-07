@@ -9,6 +9,7 @@ import (
 
 	"github.com/vinegm/ditui/internal/morse"
 	"github.com/vinegm/ditui/internal/report"
+	"github.com/vinegm/ditui/internal/tui/theme"
 )
 
 // How many of the latest answers the history strip shows.
@@ -16,11 +17,6 @@ const historyLength = 25
 
 // MaxCheatsheetLines is the most lines the cheatsheet takes, so a large custom set can't outgrow the terminal.
 const MaxCheatsheetLines = 6
-
-const (
-	decodeHelp = "type the character · esc finish"
-	encodeHelp = ". dit · - dah · enter answer · esc finish"
-)
 
 // SetSize does nothing, the drill is drawn at its own size.
 func (window *Window) SetSize(_, _ int) {}
@@ -43,14 +39,11 @@ func (window *Window) View() string {
 	}
 
 	lines = append(lines, window.feedbackLines()...)
-	lines = append(lines, "")
 
 	if window.options.Cheatsheet {
 		// Left-aligned so the columns line up and center as a block.
-		lines = append(lines, th.MutedStyle.Align(lg.Left).Render(strings.Join(window.cheatsheet(), "\n")), "")
+		lines = append(lines, "", th.MutedStyle.Align(lg.Left).Render(strings.Join(window.cheatsheet(), "\n")))
 	}
-
-	lines = append(lines, th.MutedStyle.Render(window.help()))
 
 	return th.WindowStyle.Render(strings.Join(lines, "\n"))
 }
@@ -67,12 +60,21 @@ func (window *Window) question() string {
 	return morse.Spaced(code)
 }
 
-func (window *Window) help() string {
+// Hints is the keys for the key hints bar.
+func (window *Window) Hints() []theme.Hint {
 	if window.options.Mode == morse.Encode {
-		return encodeHelp
+		return []theme.Hint{
+			{Key: ".", Desc: "Dit"},
+			{Key: "-", Desc: "Dah"},
+			{Key: "enter", Desc: "Answer"},
+			{Key: "esc", Desc: "Finish"},
+		}
 	}
 
-	return decodeHelp
+	return []theme.Hint{
+		{Key: "a character", Desc: "Answer"},
+		{Key: "esc", Desc: "Finish"},
+	}
 }
 
 func (window *Window) score() string {
