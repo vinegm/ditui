@@ -35,6 +35,7 @@ type Window struct {
 
 	tab    int
 	scroll int
+	height int
 
 	theme *theme.Theme
 }
@@ -90,20 +91,31 @@ func (window *Window) handleKey(key string) tea.Cmd {
 	return nil
 }
 
-// View renders the results window as a string.
-func (window *Window) View(_, height int) string {
-	th := window.theme
-	breakdown := window.breakdowns[window.tab]
-	ranked := breakdown.Ranked()
+// SetSize keeps the height and the scroll within what fits in it.
+func (window *Window) SetSize(_, height int) {
+	window.height = height
 
-	// Room for the longest breakdown, so switching tabs keeps the window's height.
+	total := len(window.breakdowns[window.tab].Buckets)
+	window.scroll = min(max(window.scroll, 0), max(0, total-window.visibleRows()))
+}
+
+// visibleRows is the room for the longest breakdown, so
+// switching tabs keeps the window's height.
+func (window *Window) visibleRows() int {
 	longest := 0
 	for _, other := range window.breakdowns {
 		longest = max(longest, len(other.Buckets))
 	}
 
-	visible := min(longest, max(1, height-chromeHeight))
-	window.scroll = min(max(window.scroll, 0), max(0, len(ranked)-visible))
+	return min(longest, max(1, window.height-chromeHeight))
+}
+
+// View renders the results window as a string.
+func (window *Window) View() string {
+	th := window.theme
+	breakdown := window.breakdowns[window.tab]
+	ranked := breakdown.Ranked()
+	visible := window.visibleRows()
 
 	rows := make([]string, 0, visible)
 	for _, bucket := range ranked[window.scroll:min(len(ranked), window.scroll+visible)] {

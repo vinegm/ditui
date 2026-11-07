@@ -22,9 +22,12 @@ const (
 	encodeHelp = ". dit · - dah · enter answer · esc finish"
 )
 
+// SetSize does nothing, the drill is drawn at its own size.
+func (window *Window) SetSize(_, _ int) {}
+
 // View renders the drill. Every line is always drawn, blank if unused,
 // so the window keeps its height from one question to the next.
-func (window *Window) View(_, _ int) string {
+func (window *Window) View() string {
 	th := window.theme
 
 	lines := []string{
