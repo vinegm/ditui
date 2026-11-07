@@ -88,7 +88,7 @@ Results:
 
 ## Themes
 
-Theme files are stored in the `Themes` directory; a few presets are included (catppuccin-mocha, gruvbox, tokyo-night). Copy one to `~/.config/ditui/config.yaml`, or merge its colors into your config.
+Theme files are stored in the `Themes` directory; a few presets are included (catppuccin-mocha, gruvbox, tokyo-night). Copy one to `~/.config/ditui/config.yaml`, or merge its `theme` section into your config.
 
 ## Development
 

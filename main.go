@@ -82,7 +82,7 @@ func currentVersion() string {
 func parseFlags() flags {
 	var opts flags
 
-	defaults := config.Default()
+	defaults := config.Default().Drill
 
 	flag.StringVar(&opts.modeName, "mode", defaults.Mode, "`MODE` to drill: decode (code to character) or encode (character to code)")
 	flag.StringVar(&opts.setName, "set", defaults.Set, "`SET` of characters to drill: letters, digits, alphanumeric or punctuation")
@@ -102,20 +102,20 @@ func parseFlags() flags {
 // cfg. The config is only known after parsing, so it can't be the flags' default.
 func (opts *flags) applyConfig(cfg config.Config) {
 	if !isSet("mode") {
-		opts.modeName = cfg.Mode
+		opts.modeName = cfg.Drill.Mode
 	}
 
 	if !isSet("set") {
-		opts.setName = cfg.Set
+		opts.setName = cfg.Drill.Set
 	}
 
 	// A preset picked on the command line beats custom characters from the config.
 	if !isSet("set") && !isSet("chars") {
-		opts.chars = cfg.Chars
+		opts.chars = cfg.Drill.Chars
 	}
 
 	if !isSet("cheatsheet") {
-		opts.cheatsheet = cfg.Cheatsheet
+		opts.cheatsheet = cfg.Drill.Cheatsheet
 	}
 }
 
@@ -144,19 +144,19 @@ func drillSettings(opts flags, cfg config.Config) drill.Options {
 // validDrillConfig resets each drill setting no drill can run
 // with to its default, keeping the rest of the file.
 func validDrillConfig(cfg config.Config) config.Config {
-	defaults := config.Default()
+	defaults := config.Default().Drill
 
-	if _, err := morse.ParseMode(cfg.Mode); err != nil {
+	if _, err := morse.ParseMode(cfg.Drill.Mode); err != nil {
 		warn("invalid mode in the config, using the default: %v", err)
 
-		cfg.Mode = defaults.Mode
+		cfg.Drill.Mode = defaults.Mode
 	}
 
-	if _, err := morse.ResolveSet(cfg.Set, cfg.Chars); err != nil {
+	if _, err := morse.ResolveSet(cfg.Drill.Set, cfg.Drill.Chars); err != nil {
 		warn("invalid set or chars in the config, using the defaults: %v", err)
 
-		cfg.Set = defaults.Set
-		cfg.Chars = defaults.Chars
+		cfg.Drill.Set = defaults.Set
+		cfg.Drill.Chars = defaults.Chars
 	}
 
 	return cfg
