@@ -6,7 +6,7 @@ import (
 )
 
 // Mode is which way a drill translates.
-type Mode int
+type Mode uint8
 
 const (
 	// Decode shows a code and asks for its character.

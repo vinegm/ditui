@@ -45,6 +45,7 @@ Command line flags (each overrides the config file):
 - `--set <name>` : `letters`, `digits`, `alphanumeric` or `punctuation` (defaults to `letters`)
 - `--chars <characters>` : drill only these characters, overriding `--set`
 - `--cheatsheet` : show every code of the set under the prompt
+- `--seed <seed>` : ask the same questions every run, as the demo does
 - `--version` : print the version and exit
 - `--debug` : enable debug logging
 - `--debug-file <path>` : write debug logs to the specified file (defaults to `/tmp/ditui.log`)

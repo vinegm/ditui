@@ -2,6 +2,8 @@ package drill
 
 import (
 	"fmt"
+	"hash/fnv"
+	"math/rand/v2"
 	"time"
 	"unicode/utf8"
 
@@ -19,6 +21,7 @@ type Options struct {
 	Mode       morse.Mode
 	Set        morse.Set
 	Cheatsheet bool
+	Seed       string // question order, random when empty
 }
 
 type (
@@ -48,6 +51,7 @@ type feedback struct {
 type Window struct {
 	options  Options
 	attempts []morse.Attempt
+	rng      *rand.Rand
 
 	char    rune
 	askedAt time.Time
@@ -70,6 +74,7 @@ func New(th *theme.Theme) *Window {
 // Start begins a fresh session with the given options.
 func (window *Window) Start(options Options) tea.Cmd {
 	window.options = options
+	window.rng = rngFrom(options.Seed)
 	window.attempts = nil
 	window.last = nil
 	window.char = 0
@@ -172,9 +177,22 @@ func (window *Window) record(guess string) {
 }
 
 func (window *Window) nextQuestion() {
-	window.char = window.options.Set.Random(window.char)
+	window.char = window.options.Set.Random(window.rng, window.char)
 	window.askedAt = time.Now()
 	window.input = ""
+}
+
+// rngFrom is where a session's questions come from: the same seed
+// asks the same ones, and an empty seed different ones every time.
+func rngFrom(seed string) *rand.Rand {
+	if seed == "" {
+		return rand.New(rand.NewPCG(rand.Uint64(), rand.Uint64()))
+	}
+
+	hash := fnv.New64a()
+	hash.Write([]byte(seed))
+
+	return rand.New(rand.NewPCG(hash.Sum64(), 0))
 }
 
 func (window *Window) finish() tea.Cmd {

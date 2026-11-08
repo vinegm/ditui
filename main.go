@@ -31,6 +31,7 @@ type flags struct {
 	modeName    string
 	setName     string
 	chars       string
+	seed        string
 	configPath  string
 	debugFile   string
 	cheatsheet  bool
@@ -88,6 +89,7 @@ func parseFlags() flags {
 	flag.StringVar(&opts.setName, "set", defaults.Set, "`SET` of characters to drill: letters, digits, alphanumeric or punctuation")
 	flag.StringVar(&opts.chars, "chars", defaults.Chars, "drill only these `CHARACTERS`, overriding --set")
 	flag.BoolVar(&opts.cheatsheet, "cheatsheet", defaults.Cheatsheet, "show every code of the set under the prompt")
+	flag.StringVar(&opts.seed, "seed", "", "ask the same questions every run, as for a recorded demo")
 	flag.BoolVar(&opts.debug, "debug", false, "enable debug mode")
 	flag.StringVar(&opts.debugFile, "debug-file", logFile, "path to debug log file (ignored if --debug is not set)")
 	flag.BoolVar(&opts.showVersion, "version", false, "print the version and exit")
@@ -138,6 +140,7 @@ func drillSettings(opts flags, cfg config.Config) drill.Options {
 		Mode:       mode,
 		Set:        set,
 		Cheatsheet: opts.cheatsheet,
+		Seed:       opts.seed,
 	}
 }
 

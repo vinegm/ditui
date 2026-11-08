@@ -89,9 +89,9 @@ func (set Set) Label() string {
 
 // Random picks a character from the set, never the previous one unless
 // it is all the set has.
-func (set Set) Random(previous rune) rune {
+func (set Set) Random(rng *rand.Rand, previous rune) rune {
 	for {
-		char := set.Chars[rand.IntN(len(set.Chars))]
+		char := set.Chars[rng.IntN(len(set.Chars))]
 
 		if char != previous || len(set.Chars) == 1 {
 			return char
