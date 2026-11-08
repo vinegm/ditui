@@ -127,8 +127,8 @@ func (window *Window) items() []menuItem {
 
 	return []menuItem{
 		{"Start Drill", startDrill},
-		{"Mode: " + capitalize(options.Mode.String()), mode},
-		{"Characters: " + capitalize(options.Set.Label()), characters},
+		{"Mode: ◂ " + capitalize(options.Mode.String()) + " ▸", mode},
+		{"Characters: ◂ " + capitalize(options.Set.Label()) + " ▸", characters},
 		{"Cheatsheet: " + onOff(options.Cheatsheet), cheatsheet},
 		{"Quit", quit},
 	}
