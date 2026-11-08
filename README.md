@@ -10,6 +10,8 @@
 
 ditui is a TUI trainer for [Morse code](https://en.wikipedia.org/wiki/Morse_code), built with Go and the Bubble Tea TUI framework. It shows you a code to read or a character to key, times each answer, and when you stop it breaks down where you are weakest by character, code length and kind of character.
 
+![demo](assets/demo.gif)
+
 ## Features
 
 - Terminal UI using Bubble Tea and Lip Gloss
@@ -101,7 +103,7 @@ make test    # run the test suite
 make ci      # format check, vet, lint and test
 ```
 
-Linting and formatting use [golangci-lint](https://golangci-lint.run/welcome/install/).
+Linting and formatting use [golangci-lint](https://golangci-lint.run/welcome/install/); `make demo` regenerates the demo gif with [vhs](https://github.com/charmbracelet/vhs).
 
 ## Contributing
 
