@@ -5,11 +5,11 @@ import (
 	"strings"
 	"time"
 
+	"charm.land/bubbles/v2/key"
 	lg "charm.land/lipgloss/v2"
 
 	"github.com/vinegm/ditui/internal/morse"
 	"github.com/vinegm/ditui/internal/report"
-	"github.com/vinegm/ditui/internal/tui/theme"
 )
 
 // How many of the latest answers the history strip shows.
@@ -60,21 +60,13 @@ func (window *Window) question() string {
 	return morse.Spaced(code)
 }
 
-// Hints is the keys for the key hints bar.
-func (window *Window) Hints() []theme.Hint {
+// ShortHelp is the keys for the key hints bar.
+func (window *Window) ShortHelp() []key.Binding {
 	if window.options.Mode == morse.Encode {
-		return []theme.Hint{
-			{Key: ".", Desc: "Dit"},
-			{Key: "-", Desc: "Dah"},
-			{Key: "enter", Desc: "Answer"},
-			{Key: "esc", Desc: "Finish"},
-		}
+		return []key.Binding{keys.Dit, keys.Dah, keys.Answer, keys.Finish}
 	}
 
-	return []theme.Hint{
-		{Key: "a character", Desc: "Answer"},
-		{Key: "esc", Desc: "Finish"},
-	}
+	return []key.Binding{keys.AnyChar, keys.Finish}
 }
 
 func (window *Window) score() string {

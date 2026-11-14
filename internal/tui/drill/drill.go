@@ -7,6 +7,7 @@ import (
 	"time"
 	"unicode/utf8"
 
+	"charm.land/bubbles/v2/key"
 	tea "charm.land/bubbletea/v2"
 
 	"github.com/vinegm/ditui/internal/morse"
@@ -103,7 +104,7 @@ func (window *Window) Update(msg tea.Msg) tea.Cmd {
 }
 
 func (window *Window) handleKey(msg tea.KeyPressMsg) tea.Cmd {
-	if msg.String() == "esc" {
+	if key.Matches(msg, keys.Finish) {
 		return window.finish()
 	}
 
@@ -121,16 +122,16 @@ func (window *Window) handleKey(msg tea.KeyPressMsg) tea.Cmd {
 }
 
 func (window *Window) handleEncodeKey(msg tea.KeyPressMsg) {
-	switch msg.String() {
-	case "enter", "space":
+	switch {
+	case key.Matches(msg, keys.Answer):
 		window.submitCode()
 
-	case "backspace":
+	case key.Matches(msg, keys.Delete):
 		if window.input != "" {
 			window.input = window.input[:len(window.input)-1]
 		}
 
-	case "ctrl+u":
+	case key.Matches(msg, keys.Clear):
 		window.input = ""
 
 	default:

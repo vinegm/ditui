@@ -4,6 +4,7 @@ import (
 	"slices"
 	"strings"
 
+	"charm.land/bubbles/v2/key"
 	tea "charm.land/bubbletea/v2"
 	lg "charm.land/lipgloss/v2"
 
@@ -62,7 +63,7 @@ func New(th *theme.Theme, options drill.Options) *Window {
 func (window *Window) Update(msg tea.Msg) tea.Cmd {
 	switch msg := msg.(type) {
 	case tea.KeyPressMsg:
-		return window.handleKey(msg.String())
+		return window.handleKey(msg)
 	}
 
 	return nil
@@ -94,22 +95,24 @@ func (window *Window) View() string {
 	return window.theme.WindowStyle.Render(sb.String())
 }
 
-// Hints is the keys for the key hints bar, for the selected row.
-func (window *Window) Hints() []theme.Hint {
-	hints := []theme.Hint{{Key: "jk", Desc: "Move"}}
+// ShortHelp is the keys for the key hints bar, for the selected row.
+func (window *Window) ShortHelp() []key.Binding {
+	bindings := []key.Binding{keys.Move}
 
 	switch window.current() {
 	case mode, characters:
-		hints = append(hints, theme.Hint{Key: "hl", Desc: "Change"})
+		bindings = append(bindings, keys.Change)
 
 	case cheatsheet:
-		hints = append(hints, theme.Hint{Key: "enter", Desc: "Toggle"})
+		toggle := keys.Select
+		toggle.SetHelp("enter", "Toggle")
+		bindings = append(bindings, toggle)
 
 	case startDrill, quit:
-		hints = append(hints, theme.Hint{Key: "enter", Desc: "Select"})
+		bindings = append(bindings, keys.Select)
 	}
 
-	return append(hints, theme.Hint{Key: "q", Desc: "Quit"})
+	return append(bindings, keys.Quit)
 }
 
 func getMenuTitle() string {
@@ -157,27 +160,27 @@ func (window *Window) current() menuOption {
 	return menuOption(window.Choice)
 }
 
-func (window *Window) handleKey(key string) tea.Cmd {
+func (window *Window) handleKey(msg tea.KeyPressMsg) tea.Cmd {
 	items := window.items()
 
-	switch key {
-	case "up", "k":
+	switch {
+	case key.Matches(msg, keys.Up):
 		if window.Choice > 0 {
 			window.Choice--
 		}
 
-	case "down", "j":
+	case key.Matches(msg, keys.Down):
 		if window.Choice < len(items)-1 {
 			window.Choice++
 		}
 
-	case "left", "h":
+	case key.Matches(msg, keys.Left):
 		window.adjust(-1)
 
-	case "right", "l":
+	case key.Matches(msg, keys.Right):
 		window.adjust(1)
 
-	case "enter", "space":
+	case key.Matches(msg, keys.Select):
 		switch window.current() {
 		case startDrill:
 			options := window.Options
@@ -192,7 +195,7 @@ func (window *Window) handleKey(key string) tea.Cmd {
 			return tea.Quit
 		}
 
-	case "q":
+	case key.Matches(msg, keys.Quit):
 		return tea.Quit
 	}
 
