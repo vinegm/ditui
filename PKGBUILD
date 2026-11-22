@@ -1,4 +1,4 @@
-# Maintainer: vinegm <info AT vinegm D0T com>
+# Maintainer: vinegm <info AT vinegm D0T dev>
 pkgname='ditui-bin'
 pkgver=1.0.0
 pkgrel=1

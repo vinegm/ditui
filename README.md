@@ -24,13 +24,43 @@ ditui is a TUI trainer for [Morse code](https://en.wikipedia.org/wiki/Morse_code
 - A key hints bar at the bottom of the screen
 - Configurable colors (see the Themes directory)
 
-## Getting Started
+## Install
+
+### Homebrew
+
+```bash
+brew install vinegm/tap/ditui
+```
+
+### Arch Linux
+
+The `PKGBUILD` in this repo installs the latest release's binary:
+
+```bash
+git clone https://github.com/vinegm/ditui.git
+cd ditui
+makepkg -si
+```
+
+### With Go
+
+With Go 1.25 or newer (see `go.mod`):
+
+```bash
+go install github.com/vinegm/ditui@latest
+```
+
+Or download the archive for your system from the [releases page](https://github.com/vinegm/ditui/releases).
+
+## Building from source
 
 Prerequisites: Go 1.25 or newer (see `go.mod`)
 
 Clone the repository and run locally:
 
 ```bash
+git clone https://github.com/vinegm/ditui.git
+cd ditui
 go run main.go
 ```
 
